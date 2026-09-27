@@ -24,7 +24,10 @@ public class Program
                                                   SellIn = 15,
                                                   Quality = 20
                                               },
-                                          new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6}
+                                          new Item {Name = "Conjured Mana Cake", SellIn = 3, Quality = 6},
+                                          new Item {Name = "Conjured Items1", SellIn = 5, Quality = 10},
+                                          new Item {Name = "Conjured Items2", SellIn = 0, Quality = 8},
+                                          new Item {Name = "Conjured Items3", SellIn = 3, Quality = 1}
                                       }
 
                       };
@@ -38,6 +41,7 @@ public class Program
     {
         for (var i = 0; i < Items.Count; i++)
         {
+            // Normal case quality decreases and increase as per item names
             if (Items[i].Name != "Aged Brie" && Items[i].Name != "Backstage passes to a TAFKAL80ETC concert")
             {
                 if (Items[i].Quality > 0)
@@ -46,6 +50,12 @@ public class Program
                     {
                         Items[i].Quality = Items[i].Quality - 1;
                     }
+
+                    if (Items[i].Name.StartsWith("Conjured") && Items[i].Quality > 0) //Added extra code for conjured items to degrade quality twice faster
+                    {
+                        Items[i].Quality = Items[i].Quality - 1;
+                    }
+
                 }
             }
             else
@@ -75,11 +85,13 @@ public class Program
                 }
             }
 
+            // Decrease sell in date apply to all items except  Sulfuras
             if (Items[i].Name != "Sulfuras, Hand of Ragnaros")
             {
                 Items[i].SellIn = Items[i].SellIn - 1;
             }
 
+            //  Check if sellin date as passed, decrease quality again 
             if (Items[i].SellIn < 0)
             {
                 if (Items[i].Name != "Aged Brie")
@@ -93,13 +105,17 @@ public class Program
                                 Items[i].Quality = Items[i].Quality - 1;
                             }
                         }
+                        if (Items[i].Name.StartsWith("Conjured") && Items[i].Quality > 0) //Added extra code for conjured items to degrade quality twice faster
+                        {
+                            Items[i].Quality = Items[i].Quality - 1;
+                        }
                     }
                     else
                     {
-                        Items[i].Quality = Items[i].Quality - Items[i].Quality;
+                        Items[i].Quality = Items[i].Quality - Items[i].Quality;// Backstage passes becom 0 after sellin
                     }
                 }
-                else
+                else // Aged Brie alway increases in quality
                 {
                     if (Items[i].Quality < 50)
                     {
@@ -107,6 +123,8 @@ public class Program
                     }
                 }
             }
+            //chekcing output
+            System.Console.WriteLine($"Item Name: {Items[i].Name}, Sellin: {Items[i].SellIn}, Quality: {Items[i].Quality}" );
         }
     }
 }
